@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:avatar_glow/avatar_glow.dart';
@@ -38,18 +39,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void startListening() async {
     isMicOpen=true;
-    isSpeechEnabled = await _stt.initialize();
-    await _stt.listen(
-        onResult: (value) {
-          print(value);
-          text = value.recognizedWords;
-          if(value.finalResult){
-            isMicOpen=false;
-          };// returns true when stop listening so mic should be closed that is false
-          setState(() {
-          });
-        }
+    isSpeechEnabled = await _stt.initialize(
+      onError: (value)=>print(value),
+      onStatus: (value)=>print(value)
     );
+
+    if(isSpeechEnabled) {
+      await _stt.listen(
+          onResult: (value) {
+            print(value);
+            text = value.recognizedWords;
+            if (value.finalResult) {
+              isMicOpen = false;
+            }; // returns true when stop listening so mic should be closed that is false
+            setState(() {});
+          }
+      );
+    }
+    else{
+      await _stt.stop();
+    }
   }
 
   void stopListening() async {
@@ -65,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Speech to Text'),
+        title: const Text('Speech to Text'),
         centerTitle: true,
       ),
       body: Center(
@@ -73,20 +82,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-                text,
-                style: TextStyle(
-            fontSize: 20,
+            SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                    text,
+                    style: const TextStyle(
+                fontSize: 20,
         )
+                ),
+              ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             AvatarGlow(
               glowColor: Colors.blueAccent,
               endRadius: 40,
-              duration: Duration(milliseconds: 2000),
-              repeatPauseDuration: Duration(milliseconds: 100),
+              duration: const Duration(milliseconds: 2000),
+              repeatPauseDuration: const Duration(milliseconds: 100),
               repeat: true,
               animate: isMicOpen,
               child: FloatingActionButton(
