@@ -7,12 +7,12 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
 
-    only use this in android 30 sdk version or higher(only uncomment it when using physical device)
-<!--    <queries>-->
-<!--        <intent>-->
-<!--            <action android:name="android.speech.RecognitionService" />-->
-<!--        </intent>-->
-<!--    </queries>]-->
+<!--    only use this in android 30 sdk version or higher(only uncomment it when using physical device)-->
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
 
    <application
         android:label="tts_stt"
